@@ -19,14 +19,35 @@ public class Proyecto_Grafos {
        JFileChooser FSArchivo = new JFileChooser();
        FSArchivo.setFileFilter(filter);
        int opcion = FSArchivo.showDialog(FSArchivo, "aceptar");
+       String nombreArchivo = FSArchivo.getSelectedFile().toString();
+        Graph newGrafo = new SingleGraph("Amigos"); 
        
-        
-        
-       Graph newGrafo = new SingleGraph("Grafo 1");  
+       if(opcion == JFileChooser.APPROVE_OPTION){
+            try {
+                //abrir archivo
+                FileReader archivo = new FileReader(nombreArchivo);
+                BufferedReader buffer = new BufferedReader(archivo);
+                String linea;
+                
+                while((linea = buffer.readLine()) != null){
+                    
+                   String[] tokens = linea.split(",");
+                   
+                   
+                }              
+            } catch (Exception e) {
+                System.err.println("Problemas al leer archivo");
+            } 
+            
+        }
+       
+       
+       
        newGrafo.addNode("A");
        newGrafo.addNode("B");
        newGrafo.addEdge("AB", "A", "B");
        newGrafo.addNode("C");
+       
            
     }
     
