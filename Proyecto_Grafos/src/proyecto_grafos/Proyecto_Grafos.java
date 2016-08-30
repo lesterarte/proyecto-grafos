@@ -4,6 +4,7 @@ package proyecto_grafos;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -39,6 +40,7 @@ public class Proyecto_Grafos {
                    String[] tokens = linea.split(",");
                    if(!(searchNode(tokens[0],newGrafo))){
                        newGrafo.addNode(tokens[0]);
+                       
                    }
                     if(!(searchNode(tokens[1],newGrafo))){
                        newGrafo.addNode(tokens[1]);
@@ -54,13 +56,44 @@ public class Proyecto_Grafos {
                 e.printStackTrace();
             } 
         }
-     
+       
+       //pesos
        for(Edge e:newGrafo.getEachEdge()) {
-            e.addAttribute("Peso",1);
+            e.addAttribute("weight",1);
        }
        
-       Viewer viewer = newGrafo.display();
-      
+       //labels en nodos
+       for(Node n:newGrafo){
+            n.addAttribute("ui.label", "            " + n.getId());
+       }       
+       
+       //labels en edges
+       for(Edge e:newGrafo.getEachEdge()){
+            e.addAttribute("ui.label",e.getId());
+       } 
+       int opcionIngresada = 0;
+       while(opcionIngresada != 3){
+           opcionIngresada = Integer.parseInt(JOptionPane.showInputDialog(""
+                   + "Que desea hacer?\n1.Ver amistad\n2. Ruta mas corta\n"
+                   + "3. Visualizar Grafo"));
+           
+           if(opcionIngresada == 1){
+               String verAmistadConsulta = JOptionPane.showInputDialog(""
+                   + "Ingrese el nombre de quien desea ver amistad"); 
+                   if(searchNode(verAmistadConsulta,newGrafo)){
+                       String otraPersona = JOptionPane.showInputDialog(""
+                   + "Ingrese el nombre de quien desea saber si es amigo de "+
+                               verAmistadConsulta);
+                                             
+                   }
+                   else{
+                       JOptionPane.showMessageDialog(FSArchivo, "No existe el vertice especificado");
+                   }
+           }
+           if (opcionIngresada == 3) {
+                newGrafo.display();
+           }
+        }
     }
     
     public static boolean searchNode(String node, Graph grafo){
