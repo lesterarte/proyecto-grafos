@@ -5,9 +5,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.*;
+import org.graphstream.ui.view.Viewer;
 public class Proyecto_Grafos {
    
     
@@ -21,6 +23,10 @@ public class Proyecto_Grafos {
        int opcion = FSArchivo.showDialog(FSArchivo, "aceptar");
        String nombreArchivo = FSArchivo.getSelectedFile().toString();
        Graph newGrafo = new SingleGraph("Amigos");
+       newGrafo.addAttribute("ui.quality");
+       newGrafo.addAttribute("ui.antialias");
+       System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+       
        if(opcion == JFileChooser.APPROVE_OPTION){
            try {
                 //abrir archivo
@@ -37,14 +43,23 @@ public class Proyecto_Grafos {
                     if(!(searchNode(tokens[1],newGrafo))){
                        newGrafo.addNode(tokens[1]);
                    }
-                   
+                    if(searchNode(tokens[1],newGrafo) && 
+                    searchNode(tokens[0],newGrafo)){
+                        newGrafo.addEdge(tokens[0]+ "->"+tokens[1], tokens[0], tokens[1]);
+                                                                  
+                    }
+                    
                 }              
             } catch (Exception e) {
-                System.err.println("Problemas al leer archivo");
+                e.printStackTrace();
             } 
-          
         }
-       newGrafo.display();
+     
+       for(Edge e:newGrafo.getEachEdge()) {
+            e.addAttribute("Peso",1);
+       }
+       
+       Viewer viewer = newGrafo.display();
       
     }
     
