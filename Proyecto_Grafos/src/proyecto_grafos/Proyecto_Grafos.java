@@ -3,14 +3,16 @@ package proyecto_grafos;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Iterator;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.Path;
 import org.graphstream.graph.implementations.*;
-import org.graphstream.ui.view.Viewer;
 public class Proyecto_Grafos {
    
     
@@ -54,12 +56,13 @@ public class Proyecto_Grafos {
                 }              
             } catch (Exception e) {
                 e.printStackTrace();
+                System.exit(1);
             } 
         }
        
        //pesos
        for(Edge e:newGrafo.getEachEdge()) {
-            e.addAttribute("weight",1);
+            e.addAttribute("length",1);
        }
        
        //labels en nodos
@@ -84,11 +87,54 @@ public class Proyecto_Grafos {
                        String otraPersona = JOptionPane.showInputDialog(""
                    + "Ingrese el nombre de quien desea saber si es amigo de "+
                                verAmistadConsulta);
-                                             
+                       if(searchNode(otraPersona,newGrafo)){
+                            if(frienship(verAmistadConsulta,otraPersona,newGrafo)){
+                                JOptionPane.showMessageDialog(FSArchivo,verAmistadConsulta 
+                                + " y " + otraPersona +  " SON AMIGOS!!!!" );                            
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(FSArchivo,verAmistadConsulta 
+                                + " y " + otraPersona +  " NO SON AMIGOS :(  :(" );   
+                            }   
+                       }
+                       else{
+                           JOptionPane.showMessageDialog(FSArchivo, "No existe el vertice especificado");   
+                       }
+                       
                    }
                    else{
                        JOptionPane.showMessageDialog(FSArchivo, "No existe el vertice especificado");
                    }
+           }
+           if (opcionIngresada == 2) {
+               String shortedPath = JOptionPane.showInputDialog(""
+                   + "Ingrese el nombre de quien desea un Amigo");
+               if(searchNode(shortedPath,newGrafo)){
+                       String quererAmistad = JOptionPane.showInputDialog(""
+                   + "Ingrese el nombre de quien desea ser Amigo "+
+                               shortedPath);
+                       if(searchNode(quererAmistad,newGrafo)){
+                            Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
+                            dijkstra.init(newGrafo);
+                            dijkstra.setSource(newGrafo.getNode(shortedPath));
+                            dijkstra.compute(); 
+                            Iterator<Path> pathIterator = dijkstra.getAllPathsIterator(newGrafo
+				.getNode(quererAmistad));
+                            
+                            while (pathIterator.hasNext()){
+                                JOptionPane.showMessageDialog(FSArchivo,"El camino mas rapido "
+                                        + "para que "+shortedPath+" sea amig@ de "+
+                                        quererAmistad+ " es:\n " +pathIterator.next());                                
+                            }
+                       }
+                       else{
+                           JOptionPane.showMessageDialog(FSArchivo, "La persona que dessea no se encuentra");   
+                       }
+                       
+                   }
+                   else{
+                       JOptionPane.showMessageDialog(FSArchivo, "No existe el vertice especificado");
+                   }     
            }
            if (opcionIngresada == 3) {
                 newGrafo.display();
@@ -106,5 +152,18 @@ public class Proyecto_Grafos {
         return false;
         
     }
+    
+    public static boolean frienship(String persona1, String persona2, Graph grafo){
+        
+        for(Edge e:grafo.getEachEdge()) {
+            if(e.getId().equals(persona1+"->"+persona2) || 
+                    e.getId().equals(persona2+"->"+persona1)){
+                return true;
+            }            
+        }
+        return false; 
+    }
+    
+    
     
 }
