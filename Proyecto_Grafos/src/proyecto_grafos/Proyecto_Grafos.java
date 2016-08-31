@@ -32,7 +32,7 @@ public class Proyecto_Grafos {
        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
        newGrafo.addAttribute("ui.stylehseet", "url('http://somewere/in/the/clouds/stylesheet')");
        newGrafo.addAttribute("ui.style", "padding: 45px;");
-       
+       boolean banderaTipoDato=false; 
        
        if(opcion == JFileChooser.APPROVE_OPTION){
            try {
@@ -86,13 +86,25 @@ public class Proyecto_Grafos {
             e.addAttribute("ui.style","fill-color: #99ccff;" );
        } 
        
-       //atributos 
+       newGrafo.display();
        
        int opcionIngresada = 0;
        while(opcionIngresada != 3){
-           opcionIngresada = Integer.parseInt(JOptionPane.showInputDialog(""
+           
+           do{
+               try{
+                   opcionIngresada = Integer.parseInt(JOptionPane.showInputDialog(""
                    + "Que desea hacer?\n1.Ver amistad\n2. Ruta mas corta\n"
-                   + "3. Visualizar Grafo"));
+                   + "3. Salir"));
+                   banderaTipoDato=true;      
+               }
+               catch(NumberFormatException e){
+                   JOptionPane.showMessageDialog(null, "solo se permiten numeros");
+                   banderaTipoDato=false;     
+               }
+           }while(!banderaTipoDato);
+           
+       
            
            if(opcionIngresada == 1){
                String verAmistadConsulta = JOptionPane.showInputDialog(""
@@ -150,10 +162,9 @@ public class Proyecto_Grafos {
                        JOptionPane.showMessageDialog(FSArchivo, "No existe el vertice especificado");
                    }     
            }
-           if (opcionIngresada == 3) {
-                newGrafo.display();
-           }
+           
         }
+       System.exit(0);
     }
     
     public static boolean searchNode(String node, Graph grafo){
