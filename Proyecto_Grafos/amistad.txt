@@ -1,0 +1,16 @@
+jose,carlos
+marito,susana
+laura,marcos
+marcos,marito
+jose,laura
+carlos,susana
+jose,marcos
+marcos,susana
+laura,maria
+maria,enrique
+eduardo,lester
+carlos,eduardo
+magdalena,maria
+lester,enrique
+magdalena,marito
+marcos,lester

@@ -1,6 +1,7 @@
 
 package proyecto_grafos;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Iterator;
@@ -29,6 +30,9 @@ public class Proyecto_Grafos {
        newGrafo.addAttribute("ui.quality");
        newGrafo.addAttribute("ui.antialias");
        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+       newGrafo.addAttribute("ui.stylehseet", "url('http://somewere/in/the/clouds/stylesheet')");
+       newGrafo.addAttribute("ui.style", "padding: 45px;");
+       
        
        if(opcion == JFileChooser.APPROVE_OPTION){
            try {
@@ -67,13 +71,23 @@ public class Proyecto_Grafos {
        
        //labels en nodos
        for(Node n:newGrafo){
-            n.addAttribute("ui.label", "            " + n.getId());
+            n.addAttribute("ui.label",n.getId());
+            n.addAttribute("ui.style", "text-alignment: at-right; text-padding:"
+                    + " 4px, 3px; text-background-mode: rounded-box; "
+                    + "text-background-color: #A7CC; text-color: white; "
+                    + "text-style: bold-italic; text-color: #FFF;");
+             
+           
        }       
        
        //labels en edges
        for(Edge e:newGrafo.getEachEdge()){
             e.addAttribute("ui.label",e.getId());
+            e.addAttribute("ui.style","fill-color: #99ccff;" );
        } 
+       
+       //atributos 
+       
        int opcionIngresada = 0;
        while(opcionIngresada != 3){
            opcionIngresada = Integer.parseInt(JOptionPane.showInputDialog(""
